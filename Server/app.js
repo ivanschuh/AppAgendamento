@@ -9,6 +9,8 @@ const app = express()
 app.use(express.json())
 
 const User = require('./models/User')
+const Procedimento = require('./models/Procedimento')
+const Agenda = require('./models/Agenda')
 
 const dbUser = process.env.DB_USER
 const dbPassword = process.env.DB_PASS
@@ -24,6 +26,27 @@ mongoose
 
 app.get('/', (req, res) => {
     res.status(200).json({msg: "Bem vindo a nossa API"})
+})
+
+app.post('/procedimento', async(req,res) => {
+    const { id } = req.body
+
+    const procedimentoExists = await Procedimento.findOne({ id })
+
+    if (procedimentoExists) {
+        return res.status(422).json({msg: "Não localizou o procedimento"})
+    }else {
+        return procedimentoExists
+    }
+})
+
+app.post('/agendar', async (req, res) => {
+
+    const Agenda = new Agenda ({
+        dia,
+        hora
+    })
+    
 })
 
 //RegistrarUsuario
@@ -117,6 +140,16 @@ app.post('/auth/login', async (req, res) => {
     } catch (error) {
         res.status(500).json({msg: "Erro de servidor, tente mais tarde."})
     }
+})
+
+app.post ('/auth/logout', async(req, res) => {
+    const token = req.body['token']
+    
+    token = null
+
+    res.status(200).json({
+        token: {token}
+     })
 })
 
 app.post('/auth/refresh', async (req, res, next) => {

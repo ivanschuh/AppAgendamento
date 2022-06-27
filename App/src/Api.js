@@ -40,4 +40,18 @@ export default {
     const json = await req.json();
     return json;
   },
+
+  logout: async (token)=> {
+    const req = await fetch(`${BASE_API}/auth/cadastro`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({ token }),
+    });
+    const json = await req.json();
+    return json;
+  }
 };
